@@ -88,7 +88,7 @@ public class RecurlyClient {
      * @return the newly created account object on success, null otherwise
      */
     public Account createAccount(final Account account) {
-        return (Account) doPOST(Account.ACCOUNT_RESOURCE, account, Account.class);
+        return doPOST(Account.ACCOUNT_RESOURCE, account, Account.class);
     }
 
     /**
@@ -100,7 +100,7 @@ public class RecurlyClient {
      * @return account object on success, null otherwise
      */
     public Account getAccount(final String accountCode) {
-        return (Account) doGET(Account.ACCOUNT_RESOURCE + "/" + accountCode, Account.class);
+        return doGET(Account.ACCOUNT_RESOURCE + "/" + accountCode, Account.class);
     }
 
     /**
@@ -113,7 +113,7 @@ public class RecurlyClient {
      * @return the updated account object on success, null otherwise
      */
     public Account updateAccount(final String accountCode, final Account account) {
-        return (Account) doPUT(Account.ACCOUNT_RESOURCE + "/" + accountCode, account, Account.class);
+        return doPUT(Account.ACCOUNT_RESOURCE + "/" + accountCode, account, Account.class);
     }
 
     /**
@@ -147,7 +147,7 @@ public class RecurlyClient {
         final String accountCode = billingInfo.getAccount().getAccountCode();
         // Unset it to avoid confusing Recurly
         billingInfo.setAccount(null);
-        return (BillingInfo) doPUT(Account.ACCOUNT_RESOURCE + "/" + accountCode + BillingInfo.BILLING_INFO_RESOURCE, billingInfo, BillingInfo.class);
+        return doPUT(Account.ACCOUNT_RESOURCE + "/" + accountCode + BillingInfo.BILLING_INFO_RESOURCE, billingInfo, BillingInfo.class);
     }
 
     /**
@@ -159,7 +159,7 @@ public class RecurlyClient {
      * @return the current billing info object associated with this account on success, null otherwise
      */
     public BillingInfo getBillingInfo(final String accountCode) {
-        return (BillingInfo) doGET(Account.ACCOUNT_RESOURCE + "/" + accountCode + BillingInfo.BILLING_INFO_RESOURCE, BillingInfo.class);
+        return doGET(Account.ACCOUNT_RESOURCE + "/" + accountCode + BillingInfo.BILLING_INFO_RESOURCE, BillingInfo.class);
     }
 
     /**
@@ -174,11 +174,11 @@ public class RecurlyClient {
         doDELETE(Account.ACCOUNT_RESOURCE + "/" + accountCode + BillingInfo.BILLING_INFO_RESOURCE);
     }
 
-    private RecurlyObject doGET(final String resource, final Class<? extends RecurlyObject> clazz) {
+    private <T> T doGET(final String resource, final Class<T> clazz) {
         return callRecurlySafe(client.prepareGet(baseUrl + resource), clazz);
     }
 
-    private RecurlyObject doPOST(final String resource, final RecurlyObject payload, final Class<? extends RecurlyObject> clazz) {
+    private <T> T doPOST(final String resource, final RecurlyObject payload, final Class<T> clazz) {
         final String xmlPayload;
         try {
             xmlPayload = xmlMapper.writeValueAsString(payload);
@@ -190,7 +190,7 @@ public class RecurlyClient {
         return callRecurlySafe(client.preparePost(baseUrl + resource).setBody(xmlPayload), clazz);
     }
 
-    private RecurlyObject doPUT(final String resource, final RecurlyObject payload, final Class<? extends RecurlyObject> clazz) {
+    private <T> T doPUT(final String resource, final RecurlyObject payload, final Class<T> clazz) {
         final String xmlPayload;
         try {
             xmlPayload = xmlMapper.writeValueAsString(payload);
@@ -206,7 +206,7 @@ public class RecurlyClient {
         callRecurlySafe(client.prepareDelete(baseUrl + resource), null);
     }
 
-    private RecurlyObject callRecurlySafe(final AsyncHttpClient.BoundRequestBuilder builder, @Nullable final Class<? extends RecurlyObject> clazz) {
+    private <T> T callRecurlySafe(final AsyncHttpClient.BoundRequestBuilder builder, @Nullable final Class<T> clazz) {
         try {
             return callRecurly(builder, clazz);
         } catch (IOException e) {
@@ -221,13 +221,13 @@ public class RecurlyClient {
         }
     }
 
-    private RecurlyObject callRecurly(final AsyncHttpClient.BoundRequestBuilder builder, @Nullable final Class<? extends RecurlyObject> clazz) throws IOException, ExecutionException, InterruptedException {
+    private <T> T callRecurly(final AsyncHttpClient.BoundRequestBuilder builder, @Nullable final Class<T> clazz) throws IOException, ExecutionException, InterruptedException {
         return builder.addHeader("Authorization", "Basic " + key)
                 .addHeader("Accept", "application/xml")
                 .addHeader("Content-Type", "application/xml; charset=utf-8")
-                .execute(new AsyncCompletionHandler<RecurlyObject>() {
+                .execute(new AsyncCompletionHandler<T>() {
                     @Override
-                    public RecurlyObject onCompleted(final Response response) throws Exception {
+                    public T onCompleted(final Response response) throws Exception {
                         if (response.getStatusCode() >= 300) {
                             log.warn("Recurly error: {}", response.getResponseBody());
                             return null;
