@@ -25,7 +25,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.UUID;
+import static com.ning.billing.payment.plugin.recurly.TestUtils.randomString;
 
 public class TestRecurlyClient {
     private static final Logger log = LoggerFactory.getLogger(TestRecurlyClient.class);
@@ -51,19 +51,47 @@ public class TestRecurlyClient {
     @Test(groups = "integration")
     public void testCreateAccount() throws Exception {
         final Account accountData = new Account();
-        accountData.setAccountCode(UUID.randomUUID().toString().substring(0, 5));
-        accountData.setEmail(UUID.randomUUID().toString().substring(0, 5) + "@laposte.net");
-        accountData.setFirstName(UUID.randomUUID().toString().substring(0, 5));
-        accountData.setLastName(UUID.randomUUID().toString().substring(0, 5));
-        accountData.setUsername(UUID.randomUUID().toString().substring(0, 5));
+        accountData.setAccountCode(randomString());
+        accountData.setEmail(randomString() + "@laposte.net");
+        accountData.setFirstName(randomString());
+        accountData.setLastName(randomString());
+        accountData.setUsername(randomString());
         accountData.setAcceptLanguage("en_US");
-        accountData.setCompanyName(UUID.randomUUID().toString().substring(0, 5));
+        accountData.setCompanyName(randomString());
 
         final Account account = recurlyClient.createAccount(accountData);
         Assert.assertNotNull(account);
+        Assert.assertEquals(accountData.getAccountCode(), account.getAccountCode());
+        Assert.assertEquals(accountData.getEmail(), account.getEmail());
+        Assert.assertEquals(accountData.getFirstName(), account.getFirstName());
+        Assert.assertEquals(accountData.getLastName(), account.getLastName());
+        Assert.assertEquals(accountData.getUsername(), account.getUsername());
+        Assert.assertEquals(accountData.getAcceptLanguage(), account.getAcceptLanguage());
+        Assert.assertEquals(accountData.getCompanyName(), account.getCompanyName());
         log.info("Created account: {}", account.getAccountCode());
 
         final Account retrievedAccount = recurlyClient.getAccount(account.getAccountCode());
         Assert.assertEquals(retrievedAccount, account);
+
+        final BillingInfo billingInfoData = new BillingInfo();
+        billingInfoData.setFirstName(randomString());
+        billingInfoData.setLastName(randomString());
+        billingInfoData.setNumber("4111-1111-1111-1111");
+        billingInfoData.setVerificationValue(123);
+        billingInfoData.setMonth(11);
+        billingInfoData.setYear(2015);
+        billingInfoData.setAccount(account);
+
+        final BillingInfo billingInfo = recurlyClient.createOrUpdateBillingInfo(billingInfoData);
+        Assert.assertNotNull(billingInfo);
+        Assert.assertEquals(billingInfoData.getFirstName(), billingInfo.getFirstName());
+        Assert.assertEquals(billingInfoData.getLastName(), billingInfo.getLastName());
+        Assert.assertEquals(billingInfoData.getMonth(), billingInfo.getMonth());
+        Assert.assertEquals(billingInfoData.getYear(), billingInfo.getYear());
+        Assert.assertEquals(billingInfo.getCardType(), "Visa");
+        log.info("Added billing info: {}", billingInfo.getCardType());
+
+        final BillingInfo retrievedBillingInfo = recurlyClient.getBillingInfo(account.getAccountCode());
+        Assert.assertEquals(retrievedBillingInfo, billingInfo);
     }
 }
