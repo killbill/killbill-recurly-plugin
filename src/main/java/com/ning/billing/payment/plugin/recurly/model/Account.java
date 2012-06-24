@@ -19,10 +19,14 @@ package com.ning.billing.payment.plugin.recurly.model;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.List;
 
 @XmlRootElement(name = "account")
 public class Account extends RecurlyObject {
+    @XmlTransient
+    public static final String ACCOUNT_RESOURCE = "/accounts";
+
     @XmlElementWrapper(name = "adjustments")
     @XmlElement(name = "adjustment")
     private List<Adjustment> adjustments;

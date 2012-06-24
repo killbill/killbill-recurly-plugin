@@ -17,6 +17,9 @@
 package com.ning.billing.payment.plugin.recurly.client;
 
 import com.ning.billing.payment.plugin.recurly.model.Account;
+import com.ning.billing.payment.plugin.recurly.model.BillingInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -25,6 +28,8 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class TestRecurlyClient {
+    private static final Logger log = LoggerFactory.getLogger(TestRecurlyClient.class);
+
     private RecurlyClient recurlyClient;
 
     @BeforeMethod(groups = "integration")
@@ -56,6 +61,7 @@ public class TestRecurlyClient {
 
         final Account account = recurlyClient.createAccount(accountData);
         Assert.assertNotNull(account);
+        log.info("Created account: {}", account.getAccountCode());
 
         final Account retrievedAccount = recurlyClient.getAccount(account.getAccountCode());
         Assert.assertEquals(retrievedAccount, account);

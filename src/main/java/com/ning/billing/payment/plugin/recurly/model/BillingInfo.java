@@ -18,11 +18,15 @@ package com.ning.billing.payment.plugin.recurly.model;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement(name = "billing_info")
 public class BillingInfo extends RecurlyObject {
+    @XmlTransient
+    public static final String BILLING_INFO_RESOURCE = "/billing_info";
+
     @XmlElement(name = "account")
-    private String account;
+    private Account account;
 
     @XmlElement(name = "first_name")
     private String firstName;
@@ -78,11 +82,17 @@ public class BillingInfo extends RecurlyObject {
     @XmlElement(name = "last_four")
     private String lastFour;
 
-    public String getAccount() {
+    @XmlElement(name = "number")
+    private String number;
+
+    @XmlElement(name = "verification_value")
+    private Integer verificationValue;
+
+    public Account getAccount() {
         return account;
     }
 
-    public void setAccount(final String account) {
+    public void setAccount(final Account account) {
         this.account = account;
     }
 
@@ -228,6 +238,22 @@ public class BillingInfo extends RecurlyObject {
 
     public void setLastFour(final String lastFour) {
         this.lastFour = lastFour;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(final String number) {
+        this.number = number;
+    }
+
+    public Integer getVerificationValue() {
+        return verificationValue;
+    }
+
+    public void setVerificationValue(final Integer verificationValue) {
+        this.verificationValue = verificationValue;
     }
 
     @Override

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import com.ning.billing.payment.plugin.recurly.model.Account;
+import com.ning.billing.payment.plugin.recurly.model.BillingInfo;
 import com.ning.billing.payment.plugin.recurly.model.RecurlyObject;
 import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHttpClient;
@@ -31,6 +32,7 @@ import com.ning.http.client.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -77,24 +79,103 @@ public class RecurlyClient {
         }
     }
 
+    /**
+     * Create Account
+     * <p/>
+     * Creates a new account. You may optionally include billing information.
+     *
+     * @param account account object
+     * @return the newly created account object on success, null otherwise
+     */
     public Account createAccount(final Account account) {
-        return (Account) doPOST("/accounts", account, Account.class);
+        return (Account) doPOST(Account.ACCOUNT_RESOURCE, account, Account.class);
     }
 
-    public Account getAccount(final String externalKey) {
-        return (Account) doGET("/accounts/" + externalKey, Account.class);
+    /**
+     * Get Account
+     * <p/>
+     * Returns information about a single account.
+     *
+     * @param accountCode recurly account id
+     * @return account object on success, null otherwise
+     */
+    public Account getAccount(final String accountCode) {
+        return (Account) doGET(Account.ACCOUNT_RESOURCE + "/" + accountCode, Account.class);
+    }
+
+    /**
+     * Update Account
+     * <p/>
+     * Updates an existing account.
+     *
+     * @param accountCode recurly account id
+     * @param account     account object
+     * @return the updated account object on success, null otherwise
+     */
+    public Account updateAccount(final String accountCode, final Account account) {
+        return (Account) doPUT(Account.ACCOUNT_RESOURCE + "/" + accountCode, account, Account.class);
+    }
+
+    /**
+     * Close Account
+     * <p/>
+     * Marks an account as closed and cancels any active subscriptions. Any saved billing information will also be
+     * permanently removed from the account.
+     *
+     * @param accountCode recurly account id
+     */
+    public void closeAccount(final String accountCode) {
+        doDELETE(Account.ACCOUNT_RESOURCE + "/" + accountCode);
+    }
+
+    /**
+     * Update an account's billing info
+     * <p/>
+     * When new or updated credit card information is updated, the billing information is only saved if the credit card
+     * is valid. If the account has a past due invoice, the outstanding balance will be collected to validate the billing
+     * information.
+     * <p/>
+     * If the account does not exist before the API request, the account will be created if the billing information is valid.
+     * <p/>
+     * Please note: this API end-point may be used to import billing information without security codes (CVV).
+     * Recurly recommends requiring CVV from your customers when collecting new or updated billing information.
+     *
+     * @param billingInfo billing info object to create or update
+     * @return the newly created or update billing info object on success, null otherwise
+     */
+    public BillingInfo createOrUpdateBillingInfo(final BillingInfo billingInfo) {
+        final String accountCode = billingInfo.getAccount().getAccountCode();
+        // Unset it to avoid confusing Recurly
+        billingInfo.setAccount(null);
+        return (BillingInfo) doPUT(Account.ACCOUNT_RESOURCE + "/" + accountCode + BillingInfo.BILLING_INFO_RESOURCE, billingInfo, BillingInfo.class);
+    }
+
+    /**
+     * Lookup an account's billing info
+     * <p/>
+     * Returns only the account's current billing information.
+     *
+     * @param accountCode recurly account id
+     * @return the current billing info object associated with this account on success, null otherwise
+     */
+    public BillingInfo getBillingInfo(final String accountCode) {
+        return (BillingInfo) doGET(Account.ACCOUNT_RESOURCE + "/" + accountCode + BillingInfo.BILLING_INFO_RESOURCE, BillingInfo.class);
+    }
+
+    /**
+     * Clear an account's billing info
+     * <p/>
+     * You may remove any stored billing information for an account. If the account has a subscription, the renewal will
+     * go into past due unless you update the billing info before the renewal occurs
+     *
+     * @param accountCode recurly account id
+     */
+    public void clearBillingInfo(final String accountCode) {
+        doDELETE(Account.ACCOUNT_RESOURCE + "/" + accountCode + BillingInfo.BILLING_INFO_RESOURCE);
     }
 
     private RecurlyObject doGET(final String resource, final Class<? extends RecurlyObject> clazz) {
-        try {
-            return callRecurly(client.prepareGet(baseUrl + resource), clazz);
-        } catch (IOException e) {
-            return null;
-        } catch (ExecutionException e) {
-            return null;
-        } catch (InterruptedException e) {
-            return null;
-        }
+        return callRecurlySafe(client.prepareGet(baseUrl + resource), clazz);
     }
 
     private RecurlyObject doPOST(final String resource, final RecurlyObject payload, final Class<? extends RecurlyObject> clazz) {
@@ -106,8 +187,28 @@ public class RecurlyClient {
             return null;
         }
 
+        return callRecurlySafe(client.preparePost(baseUrl + resource).setBody(xmlPayload), clazz);
+    }
+
+    private RecurlyObject doPUT(final String resource, final RecurlyObject payload, final Class<? extends RecurlyObject> clazz) {
+        final String xmlPayload;
         try {
-            return callRecurly(client.preparePost(baseUrl + resource).setBody(xmlPayload), clazz);
+            xmlPayload = xmlMapper.writeValueAsString(payload);
+        } catch (IOException e) {
+            log.warn("Unable to serialize {} object as XML: {}", clazz.getName(), payload.toString());
+            return null;
+        }
+
+        return callRecurlySafe(client.preparePut(baseUrl + resource).setBody(xmlPayload), clazz);
+    }
+
+    private void doDELETE(final String resource) {
+        callRecurlySafe(client.prepareDelete(baseUrl + resource), null);
+    }
+
+    private RecurlyObject callRecurlySafe(final AsyncHttpClient.BoundRequestBuilder builder, @Nullable final Class<? extends RecurlyObject> clazz) {
+        try {
+            return callRecurly(builder, clazz);
         } catch (IOException e) {
             log.warn("Error while calling Recurly", e);
             return null;
@@ -120,7 +221,7 @@ public class RecurlyClient {
         }
     }
 
-    private RecurlyObject callRecurly(final AsyncHttpClient.BoundRequestBuilder builder, final Class<? extends RecurlyObject> clazz) throws IOException, ExecutionException, InterruptedException {
+    private RecurlyObject callRecurly(final AsyncHttpClient.BoundRequestBuilder builder, @Nullable final Class<? extends RecurlyObject> clazz) throws IOException, ExecutionException, InterruptedException {
         return builder.addHeader("Authorization", "Basic " + key)
                 .addHeader("Accept", "application/xml")
                 .addHeader("Content-Type", "application/xml; charset=utf-8")
@@ -129,6 +230,10 @@ public class RecurlyClient {
                     public RecurlyObject onCompleted(final Response response) throws Exception {
                         if (response.getStatusCode() >= 300) {
                             log.warn("Recurly error: {}", response.getResponseBody());
+                            return null;
+                        }
+
+                        if (clazz == null) {
                             return null;
                         }
 
