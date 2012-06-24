@@ -20,4 +20,4 @@ To build the project, use maven:
 
     mvn clean install
 
-Note: you may need to install the killbill-oss-parent artifact first, to use SNAPSHOT dependencies. You can find it [here]([https://github.com/killbilling/killbill-oss-parent]).
+Note: you may need to install the killbill-oss-parent artifact first, to use SNAPSHOT dependencies. You can find it [here](https://github.com/killbilling/killbill-oss-parent).
