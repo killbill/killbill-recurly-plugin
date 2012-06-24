@@ -92,48 +92,48 @@ public class Invoice extends RecurlyObject {
         return invoiceNumber;
     }
 
-    public void setInvoiceNumber(final Integer invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
+    public void setInvoiceNumber(final Object invoiceNumber) {
+        this.invoiceNumber = integerOrNull(invoiceNumber);
     }
 
     public Integer getPoNumber() {
         return poNumber;
     }
 
-    public void setPoNumber(final Integer poNumber) {
-        this.poNumber = poNumber;
+    public void setPoNumber(final Object poNumber) {
+        this.poNumber = integerOrNull(poNumber);
     }
 
     public Integer getVarNumber() {
         return varNumber;
     }
 
-    public void setVarNumber(final Integer varNumber) {
-        this.varNumber = varNumber;
+    public void setVarNumber(final Object varNumber) {
+        this.varNumber = integerOrNull(varNumber);
     }
 
     public Integer getSubtotalInCents() {
         return subtotalInCents;
     }
 
-    public void setSubtotalInCents(final Integer subtotalInCents) {
-        this.subtotalInCents = subtotalInCents;
+    public void setSubtotalInCents(final Object subtotalInCents) {
+        this.subtotalInCents = integerOrNull(subtotalInCents);
     }
 
     public Integer getTaxInCents() {
         return taxInCents;
     }
 
-    public void setTaxInCents(final Integer taxInCents) {
-        this.taxInCents = taxInCents;
+    public void setTaxInCents(final Object taxInCents) {
+        this.taxInCents = integerOrNull(taxInCents);
     }
 
     public Integer getTotalInCents() {
         return totalInCents;
     }
 
-    public void setTotalInCents(final Integer totalInCents) {
-        this.totalInCents = totalInCents;
+    public void setTotalInCents(final Object totalInCents) {
+        this.totalInCents = integerOrNull(totalInCents);
     }
 
     public String getCurrency() {

@@ -110,40 +110,40 @@ public class Adjustment extends RecurlyObject {
         return unitAmountInCents;
     }
 
-    public void setUnitAmountInCents(final Integer unitAmountInCents) {
-        this.unitAmountInCents = unitAmountInCents;
+    public void setUnitAmountInCents(final Object unitAmountInCents) {
+        this.unitAmountInCents = integerOrNull(unitAmountInCents);
     }
 
     public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(final Integer quantity) {
-        this.quantity = quantity;
+    public void setQuantity(final Object quantity) {
+        this.quantity = integerOrNull(quantity);
     }
 
     public Integer getDiscountInCents() {
         return discountInCents;
     }
 
-    public void setDiscountInCents(final Integer discountInCents) {
-        this.discountInCents = discountInCents;
+    public void setDiscountInCents(final Object discountInCents) {
+        this.discountInCents = integerOrNull(discountInCents);
     }
 
     public Integer getTaxInCents() {
         return taxInCents;
     }
 
-    public void setTaxInCents(final Integer taxInCents) {
-        this.taxInCents = taxInCents;
+    public void setTaxInCents(final Object taxInCents) {
+        this.taxInCents = integerOrNull(taxInCents);
     }
 
     public Integer getTotalInCents() {
         return totalInCents;
     }
 
-    public void setTotalInCents(final Integer totalInCents) {
-        this.totalInCents = totalInCents;
+    public void setTotalInCents(final Object totalInCents) {
+        this.totalInCents = integerOrNull(totalInCents);
     }
 
     public String getCurrency() {

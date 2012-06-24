@@ -212,16 +212,16 @@ public class BillingInfo extends RecurlyObject {
         return year;
     }
 
-    public void setYear(final Integer year) {
-        this.year = year;
+    public void setYear(final Object year) {
+        this.year = integerOrNull(year);
     }
 
     public Integer getMonth() {
         return month;
     }
 
-    public void setMonth(final Integer month) {
-        this.month = month;
+    public void setMonth(final Object month) {
+        this.month = integerOrNull(month);
     }
 
     public String getFirstSix() {
@@ -252,8 +252,8 @@ public class BillingInfo extends RecurlyObject {
         return verificationValue;
     }
 
-    public void setVerificationValue(final Integer verificationValue) {
-        this.verificationValue = verificationValue;
+    public void setVerificationValue(final Object verificationValue) {
+        this.verificationValue = integerOrNull(verificationValue);
     }
 
     @Override

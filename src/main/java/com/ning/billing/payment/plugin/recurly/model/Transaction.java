@@ -107,16 +107,16 @@ public class Transaction extends RecurlyObject {
         return amountInCents;
     }
 
-    public void setAmountInCents(final Integer amountInCents) {
-        this.amountInCents = amountInCents;
+    public void setAmountInCents(final Object amountInCents) {
+        this.amountInCents = integerOrNull(amountInCents);
     }
 
     public Integer getTaxInCents() {
         return taxInCents;
     }
 
-    public void setTaxInCents(final Integer taxInCents) {
-        this.taxInCents = taxInCents;
+    public void setTaxInCents(final Object taxInCents) {
+        this.taxInCents = integerOrNull(taxInCents);
     }
 
     public String getCurrency() {

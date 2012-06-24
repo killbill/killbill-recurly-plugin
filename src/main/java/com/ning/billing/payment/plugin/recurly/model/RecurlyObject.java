@@ -32,7 +32,7 @@ public abstract class RecurlyObject {
 
         // Hack to work around Recurly output for nil values: the response will contain
         // an element with a nil attribute (e.g. <city nil="nil"></city>) which Jackson will
-        // interpret as an Object, not a String.
+        // interpret as an Object (Map), not a String.
         if (object instanceof Map) {
             final Map map = (Map) object;
             if (map.keySet().size() == 1 && "nil".equals(map.get("nil"))) {
@@ -41,6 +41,23 @@ public abstract class RecurlyObject {
         }
 
         return object.toString();
+    }
+
+    public Integer integerOrNull(@Nullable final Object object) {
+        if (object == null) {
+            return null;
+        }
+
+        // Integers are represented as objects (e.g. <year type="integer">2015</year>), which Jackson
+        // will interpret as an Object (Map), not Integers.
+        if (object instanceof Map) {
+            final Map map = (Map) object;
+            if (map.keySet().size() == 2 && "integer".equals(map.get("type"))) {
+                return Integer.valueOf((String) map.get(""));
+            }
+        }
+
+        return Integer.valueOf(object.toString());
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

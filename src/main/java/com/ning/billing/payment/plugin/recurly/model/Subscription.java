@@ -105,8 +105,8 @@ public class Subscription extends RecurlyObject {
         return unitAmountInCents;
     }
 
-    public void setUnitAmountInCents(final Integer unitAmountInCents) {
-        this.unitAmountInCents = unitAmountInCents;
+    public void setUnitAmountInCents(final Object unitAmountInCents) {
+        this.unitAmountInCents = integerOrNull(unitAmountInCents);
     }
 
     public String getCurrency() {
@@ -121,8 +121,8 @@ public class Subscription extends RecurlyObject {
         return quantity;
     }
 
-    public void setQuantity(final Integer quantity) {
-        this.quantity = quantity;
+    public void setQuantity(final Object quantity) {
+        this.quantity = integerOrNull(quantity);
     }
 
     public RecurlyDateTime getActivatedAt() {

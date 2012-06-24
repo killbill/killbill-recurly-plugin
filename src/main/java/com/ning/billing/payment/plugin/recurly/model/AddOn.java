@@ -79,8 +79,8 @@ public class AddOn extends RecurlyObject {
         return defaultQuantity;
     }
 
-    public void setDefaultQuantity(final Integer defaultQuantity) {
-        this.defaultQuantity = defaultQuantity;
+    public void setDefaultQuantity(final Object defaultQuantity) {
+        this.defaultQuantity = integerOrNull(defaultQuantity);
     }
 
     public Map<String, Integer> getUnitAmountInCents() {
