@@ -49,7 +49,7 @@ public class Account extends RecurlyObject {
     @XmlElement(name = "state")
     private String state;
 
-    @XmlElement(name = "username", nillable = true)
+    @XmlElement(name = "username")
     private String username;
 
     @XmlElement(name = "email")
@@ -61,10 +61,10 @@ public class Account extends RecurlyObject {
     @XmlElement(name = "last_name")
     private String lastName;
 
-    @XmlElement(name = "company_name", nillable = true)
+    @XmlElement(name = "company_name")
     private String companyName;
 
-    @XmlElement(name = "accept_language", nillable = true)
+    @XmlElement(name = "accept_language")
     private String acceptLanguage;
 
     @XmlElement(name = "hosted_login_token")
@@ -109,72 +109,72 @@ public class Account extends RecurlyObject {
         return accountCode;
     }
 
-    public void setAccountCode(final String accountCode) {
-        this.accountCode = accountCode;
+    public void setAccountCode(final Object accountCode) {
+        this.accountCode = stringOrNull(accountCode);
     }
 
     public String getState() {
         return state;
     }
 
-    public void setState(final String state) {
-        this.state = state;
+    public void setState(final Object state) {
+        this.state = stringOrNull(state);
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(final String username) {
-        this.username = username;
+    public void setUsername(final Object username) {
+        this.username = stringOrNull(username);
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(final String email) {
-        this.email = email;
+    public void setEmail(final Object email) {
+        this.email = stringOrNull(email);
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(final Object firstName) {
+        this.firstName = stringOrNull(firstName);
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
+    public void setLastName(final Object lastName) {
+        this.lastName = stringOrNull(lastName);
     }
 
     public String getCompanyName() {
         return companyName;
     }
 
-    public void setCompanyName(final String companyName) {
-        this.companyName = companyName;
+    public void setCompanyName(final Object companyName) {
+        this.companyName = stringOrNull(companyName);
     }
 
     public String getAcceptLanguage() {
         return acceptLanguage;
     }
 
-    public void setAcceptLanguage(final String acceptLanguage) {
-        this.acceptLanguage = acceptLanguage;
+    public void setAcceptLanguage(final Object acceptLanguage) {
+        this.acceptLanguage = stringOrNull(acceptLanguage);
     }
 
     public String getHostedLoginToken() {
         return hostedLoginToken;
     }
 
-    public void setHostedLoginToken(final String hostedLoginToken) {
-        this.hostedLoginToken = hostedLoginToken;
+    public void setHostedLoginToken(final Object hostedLoginToken) {
+        this.hostedLoginToken = stringOrNull(hostedLoginToken);
     }
 
     public RecurlyDateTime getCreatedAt() {

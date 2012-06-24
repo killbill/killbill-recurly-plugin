@@ -55,16 +55,16 @@ public class AddOn extends RecurlyObject {
         return addOnCode;
     }
 
-    public void setAddOnCode(final String addOnCode) {
-        this.addOnCode = addOnCode;
+    public void setAddOnCode(final Object addOnCode) {
+        this.addOnCode = stringOrNull(addOnCode);
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setName(final Object name) {
+        this.name = stringOrNull(name);
     }
 
     public Boolean getDisplayQuantityOnHostedPage() {

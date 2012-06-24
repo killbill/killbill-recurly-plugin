@@ -83,24 +83,24 @@ public class Transaction extends RecurlyObject {
         return subscription;
     }
 
-    public void setSubscription(final String subscription) {
-        this.subscription = subscription;
+    public void setSubscription(final Object subscription) {
+        this.subscription = stringOrNull(subscription);
     }
 
     public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(final String uuid) {
-        this.uuid = uuid;
+    public void setUuid(final Object uuid) {
+        this.uuid = stringOrNull(uuid);
     }
 
     public String getAction() {
         return action;
     }
 
-    public void setAction(final String action) {
-        this.action = action;
+    public void setAction(final Object action) {
+        this.action = stringOrNull(action);
     }
 
     public Integer getAmountInCents() {
@@ -123,24 +123,24 @@ public class Transaction extends RecurlyObject {
         return currency;
     }
 
-    public void setCurrency(final String currency) {
-        this.currency = currency;
+    public void setCurrency(final Object currency) {
+        this.currency = stringOrNull(currency);
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(final String status) {
-        this.status = status;
+    public void setStatus(final Object status) {
+        this.status = stringOrNull(status);
     }
 
     public String getReference() {
         return reference;
     }
 
-    public void setReference(final String reference) {
-        this.reference = reference;
+    public void setReference(final Object reference) {
+        this.reference = stringOrNull(reference);
     }
 
     public Boolean getTest() {

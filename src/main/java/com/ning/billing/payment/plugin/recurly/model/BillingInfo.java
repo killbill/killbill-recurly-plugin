@@ -100,112 +100,112 @@ public class BillingInfo extends RecurlyObject {
         return firstName;
     }
 
-    public void setFirstName(final String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(final Object firstName) {
+        this.firstName = stringOrNull(firstName);
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(final String lastName) {
-        this.lastName = lastName;
+    public void setLastName(final Object lastName) {
+        this.lastName = stringOrNull(lastName);
     }
 
     public String getCompany() {
         return company;
     }
 
-    public void setCompany(final String company) {
-        this.company = company;
+    public void setCompany(final Object company) {
+        this.company = stringOrNull(company);
     }
 
     public String getAddress1() {
         return address1;
     }
 
-    public void setAddress1(final String address1) {
-        this.address1 = address1;
+    public void setAddress1(final Object address1) {
+        this.address1 = stringOrNull(address1);
     }
 
     public String getAddress2() {
         return address2;
     }
 
-    public void setAddress2(final String address2) {
-        this.address2 = address2;
+    public void setAddress2(final Object address2) {
+        this.address2 = stringOrNull(address2);
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(final String city) {
-        this.city = city;
+    public void setCity(final Object city) {
+        this.city = stringOrNull(city);
     }
 
     public String getState() {
         return state;
     }
 
-    public void setState(final String state) {
-        this.state = state;
+    public void setState(final Object state) {
+        this.state = stringOrNull(state);
     }
 
     public String getZip() {
         return zip;
     }
 
-    public void setZip(final String zip) {
-        this.zip = zip;
+    public void setZip(final Object zip) {
+        this.zip = stringOrNull(zip);
     }
 
     public String getCountry() {
         return country;
     }
 
-    public void setCountry(final String country) {
-        this.country = country;
+    public void setCountry(final Object country) {
+        this.country = stringOrNull(country);
     }
 
     public String getPhone() {
         return phone;
     }
 
-    public void setPhone(final String phone) {
-        this.phone = phone;
+    public void setPhone(final Object phone) {
+        this.phone = stringOrNull(phone);
     }
 
     public String getVatNumber() {
         return vatNumber;
     }
 
-    public void setVatNumber(final String vatNumber) {
-        this.vatNumber = vatNumber;
+    public void setVatNumber(final Object vatNumber) {
+        this.vatNumber = stringOrNull(vatNumber);
     }
 
     public String getIpAddress() {
         return ipAddress;
     }
 
-    public void setIpAddress(final String ipAddress) {
-        this.ipAddress = ipAddress;
+    public void setIpAddress(final Object ipAddress) {
+        this.ipAddress = stringOrNull(ipAddress);
     }
 
     public String getIpAddressCountry() {
         return ipAddressCountry;
     }
 
-    public void setIpAddressCountry(final String ipAddressCountry) {
-        this.ipAddressCountry = ipAddressCountry;
+    public void setIpAddressCountry(final Object ipAddressCountry) {
+        this.ipAddressCountry = stringOrNull(ipAddressCountry);
     }
 
     public String getCardType() {
         return cardType;
     }
 
-    public void setCardType(final String cardType) {
-        this.cardType = cardType;
+    public void setCardType(final Object cardType) {
+        this.cardType = stringOrNull(cardType);
     }
 
     public Integer getYear() {
@@ -228,24 +228,24 @@ public class BillingInfo extends RecurlyObject {
         return firstSix;
     }
 
-    public void setFirstSix(final String firstSix) {
-        this.firstSix = firstSix;
+    public void setFirstSix(final Object firstSix) {
+        this.firstSix = stringOrNull(firstSix);
     }
 
     public String getLastFour() {
         return lastFour;
     }
 
-    public void setLastFour(final String lastFour) {
-        this.lastFour = lastFour;
+    public void setLastFour(final Object lastFour) {
+        this.lastFour = stringOrNull(lastFour);
     }
 
     public String getNumber() {
         return number;
     }
 
-    public void setNumber(final String number) {
-        this.number = number;
+    public void setNumber(final Object number) {
+        this.number = stringOrNull(number);
     }
 
     public Integer getVerificationValue() {

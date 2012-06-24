@@ -78,32 +78,32 @@ public class Adjustment extends RecurlyObject {
         return uuid;
     }
 
-    public void setUuid(final String uuid) {
-        this.uuid = uuid;
+    public void setUuid(final Object uuid) {
+        this.uuid = stringOrNull(uuid);
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(final String description) {
-        this.description = description;
+    public void setDescription(final Object description) {
+        this.description = stringOrNull(description);
     }
 
     public String getAccountingCode() {
         return accountingCode;
     }
 
-    public void setAccountingCode(final String accountingCode) {
-        this.accountingCode = accountingCode;
+    public void setAccountingCode(final Object accountingCode) {
+        this.accountingCode = stringOrNull(accountingCode);
     }
 
     public String getOrigin() {
         return origin;
     }
 
-    public void setOrigin(final String origin) {
-        this.origin = origin;
+    public void setOrigin(final Object origin) {
+        this.origin = stringOrNull(origin);
     }
 
     public Integer getUnitAmountInCents() {
@@ -150,8 +150,8 @@ public class Adjustment extends RecurlyObject {
         return currency;
     }
 
-    public void setCurrency(final String currency) {
-        this.currency = currency;
+    public void setCurrency(final Object currency) {
+        this.currency = stringOrNull(currency);
     }
 
     public Boolean getTaxable() {

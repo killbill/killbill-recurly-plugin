@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "plan")
-public class Plan {
+public class Plan extends RecurlyObject {
     @XmlElement(name = "plan_code")
     private String planCode;
 
@@ -31,16 +31,16 @@ public class Plan {
         return planCode;
     }
 
-    public void setPlanCode(final String planCode) {
-        this.planCode = planCode;
+    public void setPlanCode(final Object planCode) {
+        this.planCode = stringOrNull(planCode);
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setName(final Object name) {
+        this.name = stringOrNull(name);
     }
 
     @Override

@@ -19,10 +19,30 @@ package com.ning.billing.payment.plugin.recurly.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.joda.time.DateTime;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlValue;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class RecurlyObject {
+    public String stringOrNull(@Nullable final Object object) {
+        if (object == null) {
+            return null;
+        }
+
+        // Hack to work around Recurly output for nil values: the response will contain
+        // an element with a nil attribute (e.g. <city nil="nil"></city>) which Jackson will
+        // interpret as an Object, not a String.
+        if (object instanceof Map) {
+            final Map map = (Map) object;
+            if (map.keySet().size() == 1 && "nil".equals(map.get("nil"))) {
+                return null;
+            }
+        }
+
+        return object.toString();
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     protected static class RecurlyDateTime {
         @XmlValue

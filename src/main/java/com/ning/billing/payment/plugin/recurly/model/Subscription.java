@@ -89,16 +89,16 @@ public class Subscription extends RecurlyObject {
         return uuid;
     }
 
-    public void setUuid(final String uuid) {
-        this.uuid = uuid;
+    public void setUuid(final Object uuid) {
+        this.uuid = stringOrNull(uuid);
     }
 
     public String getState() {
         return state;
     }
 
-    public void setState(final String state) {
-        this.state = state;
+    public void setState(final Object state) {
+        this.state = stringOrNull(state);
     }
 
     public Integer getUnitAmountInCents() {
@@ -113,8 +113,8 @@ public class Subscription extends RecurlyObject {
         return currency;
     }
 
-    public void setCurrency(final String currency) {
-        this.currency = currency;
+    public void setCurrency(final Object currency) {
+        this.currency = stringOrNull(currency);
     }
 
     public Integer getQuantity() {
