@@ -16,23 +16,26 @@
 
 package com.ning.billing.payment.plugin.recurly.api;
 
-import com.google.common.collect.ImmutableList;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ning.billing.account.api.Account;
 import com.ning.billing.payment.api.PaymentMethodPlugin;
 import com.ning.billing.payment.plugin.api.PaymentInfoPlugin;
 import com.ning.billing.payment.plugin.api.PaymentPluginApi;
 import com.ning.billing.payment.plugin.api.PaymentPluginApiException;
-import com.ning.billing.payment.plugin.recurly.client.RecurlyClient;
 import com.ning.billing.payment.plugin.recurly.client.RecurlyObjectFactory;
-import com.ning.billing.payment.plugin.recurly.model.BillingInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.ning.billing.recurly.RecurlyClient;
+import com.ning.billing.recurly.model.BillingInfo;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
+import com.google.common.collect.ImmutableList;
 
 public class RecurlyPaymentPluginApi implements PaymentPluginApi {
+
     private static final Logger log = LoggerFactory.getLogger(RecurlyPaymentPluginApi.class);
 
     private final String instanceName;
@@ -65,7 +68,7 @@ public class RecurlyPaymentPluginApi implements PaymentPluginApi {
 
     @Override
     public String createPaymentProviderAccount(final Account account) throws PaymentPluginApiException {
-        final com.ning.billing.payment.plugin.recurly.model.Account recurlyAccount = client.createAccount(RecurlyObjectFactory.createAccountFromKillbill(account));
+        final com.ning.billing.recurly.model.Account recurlyAccount = client.createAccount(RecurlyObjectFactory.createAccountFromKillbill(account));
         if (recurlyAccount != null) {
             return recurlyAccount.getAccountCode();
         } else {

@@ -18,10 +18,11 @@ package com.ning.billing.payment.plugin.recurly.client;
 
 import com.ning.billing.payment.api.PaymentMethodPlugin;
 import com.ning.billing.payment.plugin.recurly.api.RecurlyPaymentMethodPlugin;
-import com.ning.billing.payment.plugin.recurly.model.Account;
-import com.ning.billing.payment.plugin.recurly.model.BillingInfo;
+import com.ning.billing.recurly.model.Account;
+import com.ning.billing.recurly.model.BillingInfo;
 
 public class RecurlyObjectFactory {
+
     public static Account createAccountFromKillbill(final com.ning.billing.account.api.Account killbillAccount) {
         final Account account = new Account();
 

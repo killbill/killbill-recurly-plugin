@@ -16,15 +16,17 @@
 
 package com.ning.billing.payment.plugin.recurly.api;
 
-import com.ning.billing.payment.plugin.recurly.client.RecurlyObjectFactory;
-import com.ning.billing.payment.plugin.recurly.model.Account;
-import com.ning.billing.payment.plugin.recurly.model.BillingInfo;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import com.ning.billing.payment.plugin.recurly.client.RecurlyObjectFactory;
+import com.ning.billing.recurly.model.Account;
+import com.ning.billing.recurly.model.BillingInfo;
 
 import static com.ning.billing.payment.plugin.recurly.TestUtils.randomString;
 
 public class TestRecurlyPaymentMethodPlugin {
+
     @Test(groups = "fast")
     public void testConstructor() throws Exception {
         final BillingInfo billingInfo = new BillingInfo();

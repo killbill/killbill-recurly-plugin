@@ -16,16 +16,18 @@
 
 package com.ning.billing.payment.plugin.recurly.api;
 
-import com.google.common.collect.ImmutableList;
-import com.ning.billing.payment.api.PaymentMethodPlugin;
-import com.ning.billing.payment.plugin.recurly.client.RecurlyObjectFactory;
-import com.ning.billing.payment.plugin.recurly.model.BillingInfo;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ning.billing.payment.api.PaymentMethodPlugin;
+import com.ning.billing.payment.plugin.recurly.client.RecurlyObjectFactory;
+import com.ning.billing.recurly.model.BillingInfo;
+
+import com.google.common.collect.ImmutableList;
+
 public class RecurlyPaymentMethodPlugin implements PaymentMethodPlugin {
+
     public static final String ADDRESS_1 = "address1";
     public static final String ADDRESS_2 = "address2";
     public static final String CARD_TYPE = "cardType";

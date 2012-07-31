@@ -19,6 +19,7 @@ package com.ning.billing.payment.plugin.recurly;
 import java.util.UUID;
 
 public class TestUtils {
+
     public static String randomString() {
         return UUID.randomUUID().toString().substring(0, 5);
     }
