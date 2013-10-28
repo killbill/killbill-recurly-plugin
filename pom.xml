@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright 2010-2012 Ning, Inc.
   ~
@@ -13,19 +14,18 @@
   ~ License for the specific language governing permissions and limitations
   ~ under the License.
   -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <groupId>com.ning.billing</groupId>
-        <artifactId>killbill-oss-parent</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>killbill-oss-parent</artifactId>
+        <groupId>com.ning.billing</groupId>
+        <version>0.5.1</version>
+    </parent>
     <groupId>com.ning.billing</groupId>
     <artifactId>killbill-recurly-plugin</artifactId>
-    <packaging>jar</packaging>
     <version>0.1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>Recurly plugin</name>
     <description>Recurly plugin for killbill</description>
     <url>http://github.com/killbilling/killbill-recurly-plugin</url>
@@ -34,32 +34,58 @@
         <developerConnection>scm:git:git@github.com:killbilling/killbill-recurly-plugin.git</developerConnection>
         <url>http://github.com/killbilling/killbill-recurly-plugin/tree/master</url>
     </scm>
+    <issueManagement>
+        <system>Github</system>
+        <url>http://github.com/killbilling/killbill-recurly-plugin</url>
+    </issueManagement>
     <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.ning.billing</groupId>
             <artifactId>killbill-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ning.billing.plugin</groupId>
+            <artifactId>killbill-plugin-api-notification</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ning.billing.plugin</groupId>
+            <artifactId>killbill-plugin-api-payment</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.ning.billing</groupId>
+            <artifactId>killbill-osgi-bundles-lib-killbill</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ning.billing</groupId>
+            <artifactId>killbill-osgi-bundles-lib-slf4j-osgi</artifactId>
         </dependency>
         <dependency>
             <groupId>com.ning.billing</groupId>
             <artifactId>recurly-java-library</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <scope>provided</scope>
+            <version>0.1.8</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.compendium</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <scope>test</scope>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
@@ -85,8 +111,85 @@
             </build>
         </profile>
     </profiles>
-    <issueManagement>
-        <system>Github</system>
-        <url>http://github.com/killbilling/killbill-recurly-plugin</url>
-    </issueManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.11</version>
+                <configuration>
+                    <useManifestOnlyJar>false</useManifestOnlyJar>
+                    <groups>fast,slow</groups>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                            <goal>test-jar</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <!-- use the manifest file created by the bundle plugin -->
+                                <!--<useDefaultManifestFile>true</useDefaultManifestFile>-->
+                                <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                                <!-- bundle plugin already generated the maven descriptor -->
+                                <addMavenDescriptor>false</addMavenDescriptor>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Activator>com.ning.billing.payment.plugin.recurly.RecurlyActivator</Bundle-Activator>
+                        <Export-Package/>
+                        <Private-Package>com.ning.billing.payment.plugin.recurly.*</Private-Package>
+                        <!-- Optional resolution because exported by the Felix system bundle -->
+                        <!-- sun.misc and javax.management are required for Metrics -->
+                        <Import-Package>*;com.ning.billing.osgi.api;sun.misc;javax.management;resolution:=optional
+                        </Import-Package>
+                    </instructions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>assemble-killbill-osgi-bundles-recurly</id>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <createSourcesJar>true</createSourcesJar>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
+                            <filters>
+                                <filter>
+                                    <artifact>${project.groupId}:${project.artifactId}</artifact>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

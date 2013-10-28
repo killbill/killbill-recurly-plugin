@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Ning, Inc.
+ * Copyright 2010-2013 Ning, Inc.
  *
  * Ning licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -16,6 +16,8 @@
 
 package com.ning.billing.payment.plugin.recurly.api;
 
+import java.util.UUID;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -29,15 +31,19 @@ public class TestRecurlyPaymentMethodPlugin {
 
     @Test(groups = "fast")
     public void testConstructor() throws Exception {
-        final BillingInfo billingInfo = new BillingInfo();
+        final UUID kbAccountId = UUID.randomUUID();
         final Account account = new Account();
-        account.setAccountCode(randomString());
+        account.setAccountCode(kbAccountId.toString());
+
+        final UUID kbPaymentMethodId = UUID.randomUUID();
+
+        final BillingInfo billingInfo = new BillingInfo();
         billingInfo.setAccount(account);
         billingInfo.setAddress1(randomString());
         billingInfo.setAddress2(randomString());
         billingInfo.setCardType(randomString());
         billingInfo.setCity(randomString());
-        billingInfo.setCompany(randomString());
+        billingInfo.setCompany(kbPaymentMethodId.toString());
         billingInfo.setCountry(randomString());
         billingInfo.setFirstName(randomString());
         billingInfo.setFirstSix(randomString());
@@ -54,10 +60,10 @@ public class TestRecurlyPaymentMethodPlugin {
         billingInfo.setYear(Integer.MIN_VALUE);
         billingInfo.setZip(randomString());
 
-        final RecurlyPaymentMethodPlugin paymentMethodPlugin = new RecurlyPaymentMethodPlugin(billingInfo);
+        final RecurlyPaymentMethodPlugin paymentMethodPlugin = new RecurlyPaymentMethodPlugin(billingInfo, kbPaymentMethodId);
         Assert.assertTrue(paymentMethodPlugin.isDefaultPaymentMethod());
 
-        final BillingInfo billingInfoFromPaymentMethodPlugin = RecurlyObjectFactory.createBillingInfoFromKillbill(account.getAccountCode(), paymentMethodPlugin);
+        final BillingInfo billingInfoFromPaymentMethodPlugin = RecurlyObjectFactory.createBillingInfoFromKillbill(kbAccountId, kbPaymentMethodId, paymentMethodPlugin);
         Assert.assertEquals(billingInfoFromPaymentMethodPlugin, billingInfo);
     }
 }

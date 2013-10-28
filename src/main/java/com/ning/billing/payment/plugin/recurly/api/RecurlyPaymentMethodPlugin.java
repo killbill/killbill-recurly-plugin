@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Ning, Inc.
+ * Copyright 2010-2013 Ning, Inc.
  *
  * Ning licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -19,9 +19,10 @@ package com.ning.billing.payment.plugin.recurly.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import com.ning.billing.payment.api.PaymentMethodKVInfo;
 import com.ning.billing.payment.api.PaymentMethodPlugin;
-import com.ning.billing.payment.plugin.recurly.client.RecurlyObjectFactory;
 import com.ning.billing.recurly.model.BillingInfo;
 
 import com.google.common.collect.ImmutableList;
@@ -51,12 +52,13 @@ public class RecurlyPaymentMethodPlugin implements PaymentMethodPlugin {
 
     // A single unique payment method is stored in Recurly
     private final boolean isDefaultPaymentMethod = true;
+    private final UUID kbPaymentMethodId;
+    private final BillingInfo recurlyBillingInfo;
     private final Map<String, PaymentMethodKVInfo> properties = new HashMap<String, PaymentMethodKVInfo>();
 
-    private final String externalPaymentMethodId;
-
-    public RecurlyPaymentMethodPlugin(final BillingInfo recurlyBillingInfo) {
-        this.externalPaymentMethodId = RecurlyObjectFactory.getExternalPaymentIdFromBillingInfo(recurlyBillingInfo);
+    public RecurlyPaymentMethodPlugin(final BillingInfo recurlyBillingInfo, final UUID kbPaymentMethodId) {
+        this.recurlyBillingInfo = recurlyBillingInfo;
+        this.kbPaymentMethodId = kbPaymentMethodId;
         properties.put(ADDRESS_1, new PaymentMethodKVInfo(ADDRESS_1, recurlyBillingInfo.getAddress1(), true));
         properties.put(ADDRESS_2, new PaymentMethodKVInfo(ADDRESS_2, recurlyBillingInfo.getAddress2(), true));
         properties.put(CARD_TYPE, new PaymentMethodKVInfo(CARD_TYPE, recurlyBillingInfo.getCardType(), true));
@@ -80,8 +82,14 @@ public class RecurlyPaymentMethodPlugin implements PaymentMethodPlugin {
     }
 
     @Override
+    public UUID getKbPaymentMethodId() {
+        return kbPaymentMethodId;
+    }
+
+    @Override
     public String getExternalPaymentMethodId() {
-        return externalPaymentMethodId;
+        // Recurly doesn't expose one
+        return kbPaymentMethodId.toString();
     }
 
     @Override
@@ -95,12 +103,68 @@ public class RecurlyPaymentMethodPlugin implements PaymentMethodPlugin {
     }
 
     @Override
-    public String getValueString(final String key) {
-        final PaymentMethodKVInfo paymentMethodKVInfo = properties.get(key);
-        if (paymentMethodKVInfo == null || paymentMethodKVInfo.getValue() == null) {
-            return null;
+    public String getType() {
+        return "CreditCard";
+    }
+
+    @Override
+    public String getCCName() {
+        if (recurlyBillingInfo.getFirstName() != null && recurlyBillingInfo.getLastName() != null) {
+            return recurlyBillingInfo.getFirstName() + " " + recurlyBillingInfo.getLastName();
+        } else if (recurlyBillingInfo.getLastName() == null) {
+            return recurlyBillingInfo.getFirstName();
         } else {
-            return paymentMethodKVInfo.getValue().toString();
+            return recurlyBillingInfo.getLastName();
         }
+    }
+
+    @Override
+    public String getCCType() {
+        return recurlyBillingInfo.getCardType();
+    }
+
+    @Override
+    public String getCCExpirationMonth() {
+        return String.valueOf(recurlyBillingInfo.getMonth());
+    }
+
+    @Override
+    public String getCCExpirationYear() {
+        return String.valueOf(recurlyBillingInfo.getYear());
+    }
+
+    @Override
+    public String getCCLast4() {
+        return recurlyBillingInfo.getLastFour();
+    }
+
+    @Override
+    public String getAddress1() {
+        return recurlyBillingInfo.getAddress1();
+    }
+
+    @Override
+    public String getAddress2() {
+        return recurlyBillingInfo.getAddress2();
+    }
+
+    @Override
+    public String getCity() {
+        return recurlyBillingInfo.getCity();
+    }
+
+    @Override
+    public String getState() {
+        return recurlyBillingInfo.getState();
+    }
+
+    @Override
+    public String getZip() {
+        return recurlyBillingInfo.getZip();
+    }
+
+    @Override
+    public String getCountry() {
+        return recurlyBillingInfo.getCountry();
     }
 }
