@@ -17,25 +17,39 @@
 package com.ning.billing.payment.plugin.recurly.api;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import org.joda.time.DateTime;
 
+import com.ning.billing.catalog.api.Currency;
 import com.ning.billing.payment.plugin.api.PaymentInfoPlugin;
 import com.ning.billing.payment.plugin.api.PaymentPluginStatus;
 import com.ning.billing.recurly.model.Transaction;
 
 public class RecurlyPaymentInfoPlugin implements PaymentInfoPlugin {
 
+    private final UUID kbPaymentId;
     private final Transaction transaction;
 
-    public RecurlyPaymentInfoPlugin(final Transaction transaction) {
+    public RecurlyPaymentInfoPlugin(final UUID kbPaymentId, final Transaction transaction) {
+        this.kbPaymentId = kbPaymentId;
         this.transaction = transaction;
+    }
+
+    @Override
+    public UUID getKbPaymentId() {
+        return kbPaymentId;
     }
 
     @Override
     public BigDecimal getAmount() {
         final Integer amount = transaction.getAmountInCents() / 100;
         return new BigDecimal(amount.toString());
+    }
+
+    @Override
+    public Currency getCurrency() {
+        return Currency.valueOf(transaction.getCurrency());
     }
 
     @Override

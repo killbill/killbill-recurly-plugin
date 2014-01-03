@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 
 import org.joda.time.DateTime;
 
+import com.ning.billing.catalog.api.Currency;
 import com.ning.billing.payment.plugin.api.RefundInfoPlugin;
 import com.ning.billing.payment.plugin.api.RefundPluginStatus;
 import com.ning.billing.recurly.model.Transaction;
@@ -42,6 +43,11 @@ public class RecurlyRefundInfoPlugin implements RefundInfoPlugin {
     @Override
     public BigDecimal getAmount() {
         return refundAmount;
+    }
+
+    @Override
+    public Currency getCurrency() {
+        return Currency.valueOf(transaction.getCurrency());
     }
 
     @Override

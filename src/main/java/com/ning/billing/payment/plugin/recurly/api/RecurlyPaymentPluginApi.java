@@ -70,7 +70,7 @@ public class RecurlyPaymentPluginApi implements PaymentPluginApi {
         transaction.setAccount(account);
 
         final Transaction createdTransaction = client.createTransaction(transaction);
-        return new RecurlyPaymentInfoPlugin(createdTransaction);
+        return new RecurlyPaymentInfoPlugin(kbPaymentId, createdTransaction);
     }
 
     @Override
@@ -79,8 +79,13 @@ public class RecurlyPaymentPluginApi implements PaymentPluginApi {
         if (transactionForPayment == null) {
             return null;
         } else {
-            return new RecurlyPaymentInfoPlugin(transactionForPayment);
+            return new RecurlyPaymentInfoPlugin(kbPaymentId, transactionForPayment);
         }
+    }
+
+    @Override
+    public Pagination<PaymentInfoPlugin> searchPayments(final String searchKey, final Long offset, final Long limit, final TenantContext context) throws PaymentPluginApiException {
+        throw new UnsupportedOperationException();
     }
 
     @Override

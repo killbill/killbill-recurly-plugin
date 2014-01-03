@@ -20,7 +20,7 @@
     <parent>
         <artifactId>killbill-oss-parent</artifactId>
         <groupId>com.ning.billing</groupId>
-        <version>0.5.1</version>
+        <version>0.5.9</version>
     </parent>
     <groupId>com.ning.billing</groupId>
     <artifactId>killbill-recurly-plugin</artifactId>
@@ -69,7 +69,7 @@
         <dependency>
             <groupId>com.ning.billing</groupId>
             <artifactId>recurly-java-library</artifactId>
-            <version>0.1.8</version>
+            <version>0.2.0</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
