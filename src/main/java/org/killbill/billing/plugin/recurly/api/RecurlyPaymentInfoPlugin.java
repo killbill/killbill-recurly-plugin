@@ -1,5 +1,6 @@
 /*
- * Copyright 2010-2013 Ning, Inc.
+ * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014 The Billing Project, LLC
  *
  * Ning licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -14,16 +15,16 @@
  * under the License.
  */
 
-package com.ning.billing.payment.plugin.recurly.api;
+package org.killbill.billing.plugin.recurly.api;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.joda.time.DateTime;
+import org.killbill.billing.catalog.api.Currency;
+import org.killbill.billing.payment.plugin.api.PaymentInfoPlugin;
+import org.killbill.billing.payment.plugin.api.PaymentPluginStatus;
 
-import com.ning.billing.catalog.api.Currency;
-import com.ning.billing.payment.plugin.api.PaymentInfoPlugin;
-import com.ning.billing.payment.plugin.api.PaymentPluginStatus;
 import com.ning.billing.recurly.model.Transaction;
 
 public class RecurlyPaymentInfoPlugin implements PaymentInfoPlugin {

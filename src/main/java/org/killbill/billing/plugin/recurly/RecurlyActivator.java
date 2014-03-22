@@ -1,5 +1,6 @@
 /*
- * Copyright 2010-2013 Ning, Inc.
+ * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014 The Billing Project, LLC
  *
  * Ning licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -14,20 +15,20 @@
  * under the License.
  */
 
-package com.ning.billing.payment.plugin.recurly;
+package org.killbill.billing.plugin.recurly;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import org.killbill.billing.osgi.api.OSGIPluginProperties;
+import org.killbill.billing.payment.plugin.api.PaymentPluginApi;
+import org.killbill.billing.plugin.recurly.api.RecurlyPaymentPluginApi;
+import org.killbill.killbill.osgi.libs.killbill.KillbillActivatorBase;
+import org.killbill.killbill.osgi.libs.killbill.OSGIKillbillEventDispatcher.OSGIKillbillEventHandler;
 import org.osgi.framework.BundleContext;
 import org.slf4j.impl.StaticLoggerBinder;
 
-import com.ning.billing.osgi.api.OSGIPluginProperties;
-import com.ning.billing.payment.plugin.api.PaymentPluginApi;
-import com.ning.billing.payment.plugin.recurly.api.RecurlyPaymentPluginApi;
 import com.ning.billing.recurly.RecurlyClient;
-import com.ning.killbill.osgi.libs.killbill.KillbillActivatorBase;
-import com.ning.killbill.osgi.libs.killbill.OSGIKillbillEventDispatcher.OSGIKillbillEventHandler;
 
 public class RecurlyActivator extends KillbillActivatorBase {
 

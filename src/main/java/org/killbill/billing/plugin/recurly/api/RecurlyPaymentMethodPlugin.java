@@ -1,5 +1,6 @@
 /*
- * Copyright 2010-2013 Ning, Inc.
+ * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014 The Billing Project, LLC
  *
  * Ning licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -14,15 +15,16 @@
  * under the License.
  */
 
-package com.ning.billing.payment.plugin.recurly.api;
+package org.killbill.billing.plugin.recurly.api;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.ning.billing.payment.api.PaymentMethodKVInfo;
-import com.ning.billing.payment.api.PaymentMethodPlugin;
+import org.killbill.billing.payment.api.PaymentMethodKVInfo;
+import org.killbill.billing.payment.api.PaymentMethodPlugin;
+
 import com.ning.billing.recurly.model.BillingInfo;
 
 import com.google.common.collect.ImmutableList;

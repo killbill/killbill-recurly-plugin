@@ -1,5 +1,6 @@
 /*
- * Copyright 2010-2013 Ning, Inc.
+ * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014 The Billing Project, LLC
  *
  * Ning licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -14,12 +15,20 @@
  * under the License.
  */
 
-package com.ning.billing.payment.plugin.recurly.api;
+package org.killbill.billing.plugin.recurly.api;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import org.killbill.billing.catalog.api.Currency;
+import org.killbill.billing.payment.api.PaymentMethodPlugin;
+import org.killbill.billing.payment.plugin.api.PaymentInfoPlugin;
+import org.killbill.billing.payment.plugin.api.PaymentMethodInfoPlugin;
+import org.killbill.billing.payment.plugin.api.PaymentPluginApiException;
+import org.killbill.billing.payment.plugin.api.PaymentPluginStatus;
+import org.killbill.billing.payment.plugin.api.RefundInfoPlugin;
+import org.killbill.billing.payment.plugin.api.RefundPluginStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -27,14 +36,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.ning.billing.catalog.api.Currency;
-import com.ning.billing.payment.api.PaymentMethodPlugin;
-import com.ning.billing.payment.plugin.api.PaymentInfoPlugin;
-import com.ning.billing.payment.plugin.api.PaymentMethodInfoPlugin;
-import com.ning.billing.payment.plugin.api.PaymentPluginApiException;
-import com.ning.billing.payment.plugin.api.PaymentPluginStatus;
-import com.ning.billing.payment.plugin.api.RefundInfoPlugin;
-import com.ning.billing.payment.plugin.api.RefundPluginStatus;
 import com.ning.billing.recurly.RecurlyClient;
 import com.ning.billing.recurly.TransactionErrorException;
 import com.ning.billing.recurly.model.Account;

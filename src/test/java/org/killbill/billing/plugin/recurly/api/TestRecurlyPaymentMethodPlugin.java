@@ -1,5 +1,6 @@
 /*
- * Copyright 2010-2013 Ning, Inc.
+ * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014 The Billing Project, LLC
  *
  * Ning licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -14,18 +15,17 @@
  * under the License.
  */
 
-package com.ning.billing.payment.plugin.recurly.api;
+package org.killbill.billing.plugin.recurly.api;
 
 import java.util.UUID;
 
+import org.killbill.billing.plugin.recurly.client.RecurlyObjectFactory;
+import com.ning.billing.recurly.model.Account;
+import com.ning.billing.recurly.model.BillingInfo;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.ning.billing.payment.plugin.recurly.client.RecurlyObjectFactory;
-import com.ning.billing.recurly.model.Account;
-import com.ning.billing.recurly.model.BillingInfo;
-
-import static com.ning.billing.payment.plugin.recurly.TestUtils.randomString;
+import static org.killbill.billing.plugin.recurly.TestUtils.randomString;
 
 public class TestRecurlyPaymentMethodPlugin {
 

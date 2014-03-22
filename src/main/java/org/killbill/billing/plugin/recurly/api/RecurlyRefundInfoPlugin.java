@@ -1,5 +1,6 @@
 /*
- * Copyright 2010-2013 Ning, Inc.
+ * Copyright 2010-2014 Ning, Inc.
+ * Copyright 2014 The Billing Project, LLC
  *
  * Ning licenses this file to you under the Apache License, version 2.0
  * (the "License"); you may not use this file except in compliance with the
@@ -14,15 +15,16 @@
  * under the License.
  */
 
-package com.ning.billing.payment.plugin.recurly.api;
+package org.killbill.billing.plugin.recurly.api;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import org.joda.time.DateTime;
+import org.killbill.billing.catalog.api.Currency;
+import org.killbill.billing.payment.plugin.api.RefundInfoPlugin;
+import org.killbill.billing.payment.plugin.api.RefundPluginStatus;
 
-import com.ning.billing.catalog.api.Currency;
-import com.ning.billing.payment.plugin.api.RefundInfoPlugin;
-import com.ning.billing.payment.plugin.api.RefundPluginStatus;
 import com.ning.billing.recurly.model.Transaction;
 
 public class RecurlyRefundInfoPlugin implements RefundInfoPlugin {
@@ -38,6 +40,12 @@ public class RecurlyRefundInfoPlugin implements RefundInfoPlugin {
     public RecurlyRefundInfoPlugin(final Transaction transaction) {
         // TODO Wrong in case of partial refunds
         this(transaction, new BigDecimal(((Integer) (transaction.getAmountInCents() / 100)).toString()));
+    }
+
+    @Override
+    public UUID getKbPaymentId() {
+        // TODO
+        return null;
     }
 
     @Override
@@ -79,9 +87,14 @@ public class RecurlyRefundInfoPlugin implements RefundInfoPlugin {
     }
 
     @Override
-    public String getReferenceId() {
+    public String getFirstRefundReferenceId() {
         // TODO That's the payment reference id
         return transaction.getUuid();
+    }
+
+    @Override
+    public String getSecondRefundReferenceId() {
+        return null;
     }
 
     @Override
@@ -122,7 +135,10 @@ public class RecurlyRefundInfoPlugin implements RefundInfoPlugin {
         if (getGatewayErrorCode() != null ? !getGatewayErrorCode().equals(that.getGatewayErrorCode()) : that.getGatewayErrorCode() != null) {
             return false;
         }
-        if (getReferenceId() != null ? !getReferenceId().equals(that.getReferenceId()) : that.getReferenceId() != null) {
+        if (getFirstRefundReferenceId() != null ? !getFirstRefundReferenceId().equals(that.getFirstRefundReferenceId()) : that.getFirstRefundReferenceId() != null) {
+            return false;
+        }
+        if (getSecondRefundReferenceId() != null ? !getSecondRefundReferenceId().equals(that.getSecondRefundReferenceId()) : that.getSecondRefundReferenceId() != null) {
             return false;
         }
 
@@ -138,7 +154,8 @@ public class RecurlyRefundInfoPlugin implements RefundInfoPlugin {
         result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
         result = 31 * result + (getGatewayError() != null ? getGatewayError().hashCode() : 0);
         result = 31 * result + (getGatewayErrorCode() != null ? getGatewayErrorCode().hashCode() : 0);
-        result = 31 * result + (getReferenceId() != null ? getReferenceId().hashCode() : 0);
+        result = 31 * result + (getFirstRefundReferenceId() != null ? getFirstRefundReferenceId().hashCode() : 0);
+        result = 31 * result + (getSecondRefundReferenceId() != null ? getSecondRefundReferenceId().hashCode() : 0);
         return result;
     }
 }
